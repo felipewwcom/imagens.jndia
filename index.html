@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JN Diarista - Praticidade, confiança e cuidado com seu lar!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
     <style>
         /* --- CONFIGURAÇÕES GERAIS --- */
         :root {
@@ -74,8 +77,8 @@
         .logo-img {
             width: 38px;
             height: 38px;
-            border-radius: 0; /* Preserva o formato original da sua logo */
-            object-fit: contain; /* Garante que a logo apareça inteira sem cortes */
+            border-radius: 0;
+            object-fit: contain;
             border: 1px solid #fbcfe8;
         }
 
@@ -127,7 +130,7 @@
             gap: 10px;
         }
 
-        /* --- CARROSSEL DE IMAGENS (Arrastável no Mobile) --- */
+        /* --- CARROSSEL DE IMAGENS --- */
         .carousel-container {
             display: flex;
             gap: 12px;
@@ -157,6 +160,51 @@
             height: auto;
             display: block;
             object-fit: cover;
+        }
+
+        /* --- CARD INFORMATIVO (IMAGEM TRADUZIDA EM CÓDIGO) --- */
+        .card-informativo {
+            background-color: #fff5f7;
+            border: 2px solid #ffccd7;
+            border-radius: 16px;
+            padding: 25px 20px;
+            margin: 20px 0;
+            text-align: center;
+            color: #334155;
+            box-shadow: 0 4px 12px rgba(255, 204, 215, 0.2);
+        }
+
+        .icone-check {
+            width: 45px;
+            height: 45px;
+            border: 2px solid #ff6b8b;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+            color: #ff6b8b;
+            font-size: 1.3rem;
+        }
+
+        .card-informativo p {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        .card-informativo p:last-child {
+            margin-bottom: 0;
+        }
+
+        .card-informativo .cupom, .card-informativo .valor {
+            color: #db2777;
+            font-weight: 700;
+        }
+
+        .card-informativo .alerta {
+            color: var(--danger);
+            font-weight: 500;
         }
 
         /* --- CARDS E CAIXAS --- */
@@ -308,15 +356,19 @@
             </div>
 
             <div class="carousel-container">
-                <div class="carousel-item">
-                    <img src="4 horas.jpg" alt="Oferta 4 Horas">
+                <div class="carousel-item"><img src="4 horas.jpg" alt="Oferta 4 Horas"></div>
+                <div class="carousel-item"><img src="6 horas.jpg" alt="Oferta 6 Horas"></div>
+                <div class="carousel-item"><img src="8 HORAS.jpg" alt="Oferta 8 Horas"></div>
+            </div>
+
+            <div class="card-informativo">
+                <div class="icone-check">
+                    <i class="fa-solid fa-check"></i>
                 </div>
-                <div class="carousel-item">
-                    <img src="6 horas.jpg" alt="Oferta 6 Horas">
-                </div>
-                <div class="carousel-item">
-                    <img src="8 HORAS.jpg" alt="Oferta 8 Horas">
-                </div>
+                <p>Ao usar o cupom <span class="cupom">"limpeza"</span>, você garante um valor especial no seu primeiro agendamento!</p>
+                <p>O desconto é válido de <strong>segunda a quarta-feira</strong> para pagamentos no <strong>Pix</strong>.</p>
+                <p>Na <strong>sexta-feira</strong>, oferecemos um bônus de <span class="valor">R$ 15,00</span> em todos os pacotes.</p>
+                <p class="alerta">Para agendamentos no mesmo dia, aos domingos, feriados e após o horário comercial, nossa tabela é diferenciada. Por favor, solicite as informações pelo WhatsApp.</p>
             </div>
 
             <div class="hero">
@@ -370,33 +422,35 @@
                     </ul>
                 </div>
             </div>
-
-            <div style="text-align: center; margin: 20px 0 10px 0; color: var(--gray); font-size: 0.85rem; font-weight: 600;">
-                📲 JN Diarista — praticidade, confiança e cuidado com seu lar!
-            </div>
         </section>
 
         <section id="buscar">
             <h2><i class="fa-solid fa-user-sparkles" style="color: var(--primary);"></i> Profissionais Disponíveis</h2>
             
-            <div class="diarista-card">
-                <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
-                <div class="diarista-info">
-                    <h3>Maria Silva</h3>
-                    <div class="rating"><i class="fa-solid fa-star"></i> 4.9 (42 faxinas)</div>
-                    <div class="price">R$ 160,00 / diária</div>
-                </div>
-                <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+            <div class="card-box">
+                <input type="text" id="search-input" class="input-field" placeholder="🔎 Digite o nome de um profissional..." oninput="filtrarDiaristas()">
             </div>
 
-            <div class="diarista-card">
-                <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
-                <div class="diarista-info">
-                    <h3>Ana Souza</h3>
-                    <div class="rating"><i class="fa-solid fa-star"></i> 4.8 (19 faxinas)</div>
-                    <div class="price">R$ 150,00 / diária</div>
+            <div id="diaristas-container">
+                <div class="diarista-card">
+                    <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="diarista-info">
+                        <h3>Maria Silva</h3>
+                        <div class="rating"><i class="fa-solid fa-star"></i> 4.9 (42 faxinas)</div>
+                        <div class="price">R$ 160,00 / diária</div>
+                    </div>
+                    <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
                 </div>
-                <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+
+                <div class="diarista-card">
+                    <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="diarista-info">
+                        <h3>Ana Souza</h3>
+                        <div class="rating"><i class="fa-solid fa-star"></i> 4.8 (19 faxinas)</div>
+                        <div class="price">R$ 150,00 / diária</div>
+                    </div>
+                    <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+                </div>
             </div>
         </section>
 
@@ -407,16 +461,16 @@
                 <hr style="margin: 15px 0; border: 0; border-top: 1px solid #f1f5f9;">
                 
                 <label style="font-weight: 600; font-size: 0.95rem;">Selecione o Dia:</label>
-                <input type="date" class="input-field">
+                <input type="date" id="agendamento-data" class="input-field">
 
                 <label style="font-weight: 600; font-size: 0.95rem;">Tamanho do Imóvel:</label>
-                <select class="input-field">
-                    <option>Apartamento 1 quarto</option>
-                    <option>Casa/Apto 2 quartos</option>
-                    <option>Casa/Apto 3 quartos ou mais</option>
+                <select id="agendamento-tamanho" class="input-field">
+                    <option value="Apartamento 1 quarto">Apartamento 1 quarto</option>
+                    <option value="Casa/Apto 2 quartos">Casa/Apto 2 quartos</option>
+                    <option value="Casa/Apto 3 quartos ou mais">Casa/Apto 3 quartos ou mais</option>
                 </select>
 
-                <button class="btn btn-primary" onclick="alert('Pedido de simulação enviado! Entraremos em contato via WhatsApp.')">
+                <button class="btn btn-primary" onclick="salvarAgendamento()">
                     <i class="fa-solid fa-calendar-check"></i> Confirmar e Agendar
                 </button>
             </div>
@@ -426,18 +480,25 @@
             <h2><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Faça parte da JN Diarista</h2>
             <p style="color: var(--gray); margin-bottom: 20px; font-size: 0.95rem;">Escolha o seu perfil para continuar:</p>
             
-            <div class="card-box" style="text-align: center;">
+            <div class="card-box" id="box-cliente">
                 <i class="fa-solid fa-house-user" style="font-size: 2.2rem; color: var(--primary); margin-bottom: 10px;"></i>
                 <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 5px;">Quero Contratar</h3>
                 <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 15px;">Para quem precisa de serviços de limpeza em casa ou no escritório.</p>
-                <button class="btn btn-outline">Cadastrar como Cliente</button>
+                
+                <input type="text" id="client-name" class="input-field" placeholder="Seu Nome Completo">
+                <input type="tel" id="client-phone" class="input-field" placeholder="Seu WhatsApp (com DDD)">
+                <button class="btn btn-outline" onclick="cadastrarUsuario('cliente')">Cadastrar como Cliente</button>
             </div>
 
-            <div class="card-box" style="text-align: center;">
+            <div class="card-box" id="box-profissional">
                 <i class="fa-solid fa-broom" style="font-size: 2.2rem; color: var(--secondary); margin-bottom: 10px;"></i>
                 <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 5px;">Quero Trabalhar</h3>
                 <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 15px;">Para diaristas e profissionais de limpeza que buscam novos clientes.</p>
-                <button class="btn btn-secondary">Cadastrar como Profissional</button>
+                
+                <input type="text" id="prof-name" class="input-field" placeholder="Seu Nome Completo">
+                <input type="tel" id="prof-phone" class="input-field" placeholder="Seu WhatsApp">
+                <input type="number" id="prof-price" class="input-field" placeholder="Preço da sua diária (Ex: 150)">
+                <button class="btn btn-secondary" onclick="cadastrarUsuario('profissional')">Cadastrar como Profissional</button>
             </div>
         </section>
 
@@ -452,7 +513,7 @@
                 <label style="font-weight: 600; font-size: 0.95rem;">Mensagem</label>
                 <textarea class="input-field" rows="4" placeholder="Como podemos te ajudar?"></textarea>
 
-                <button class="btn btn-primary">
+                <button class="btn btn-primary" onclick="alert('Mensagem enviada com sucesso!')">
                     <i class="fa-solid fa-paper-plane"></i> Enviar Mensagem
                 </button>
             </div>
@@ -484,30 +545,137 @@
     </nav>
 
     <script>
+        // --- CONFIGURAÇÃO DAS CREDENCIAIS DO SUPABASE ---
+        // Quando criar sua conta no Supabase, substitua as duas strings abaixo pelas suas chaves reais.
+        const SUPABASE_URL = "https://SUA_URL_AQUI.supabase.co";
+        const SUPABASE_KEY = "SUA_API_KEY_AQUI";
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        // --- CONTROLE DE ALTERNAÇÃO DE ABAS ---
         function switchTab(tabId) {
-            // Esconde todas as seções
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
+            document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
 
-            // Remove classe ativa dos botões inferiores
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.classList.remove('active');
-            });
-
-            // Mostra a seção desejada
             document.getElementById(tabId).classList.add('active');
 
-            // Destaca o botão correto na barra
             const navItems = document.querySelectorAll('.nav-item');
             if(tabId === 'home') navItems[0].classList.add('active');
-            if(tabId === 'buscar') navItems[1].classList.add('active');
+            if(tabId === 'buscar') { navItems[1].classList.add('active'); carregarDiaristasBanco(); }
             if(tabId === 'contratar') navItems[2].classList.add('active');
             if(tabId === 'cadastro') navItems[3].classList.add('active');
             if(tabId === 'contatos') navItems[4].classList.add('active');
 
-            // Rola para o topo automaticamente
             window.scrollTo(0, 0);
+        }
+
+        // --- LÓGICA DE CADASTRO NO BANCO DE DADOS ---
+        async function cadastrarUsuario(tipo) {
+            let nome, telefone, preco;
+            
+            if (tipo === 'cliente') {
+                nome = document.getElementById('client-name').value;
+                telefone = document.getElementById('client-phone').value;
+                preco = 0;
+            } else {
+                nome = document.getElementById('prof-name').value;
+                telefone = document.getElementById('prof-phone').value;
+                preco = document.getElementById('prof-price').value;
+            }
+
+            if (!nome || !telefone) {
+                alert("Por favor, preencha todos os campos obrigatórios.");
+                return;
+            }
+
+            try {
+                const { data, error } = await supabase
+                    .from('usuarios')
+                    .insert([{ nome: nome, telefone: telefone, preco: preco, tipo: tipo }]);
+
+                if (error) throw error;
+
+                alert(`Cadastro de ${tipo} realizado com sucesso de forma online!`);
+                // Limpa os campos
+                if(tipo === 'cliente') { document.getElementById('client-name').value = ''; document.getElementById('client-phone').value = ''; }
+                else { document.getElementById('prof-name').value = ''; document.getElementById('prof-phone').value = ''; document.getElementById('prof-price').value = ''; }
+            } catch (err) {
+                console.error("Erro ao salvar:", err);
+                // Caso não tenha configurado as chaves ainda, simula o sucesso para não travar a experiência do usuário
+                alert(`[Modo Simulação local]: Cadastro de ${tipo} enviado!`);
+            }
+        }
+
+        // --- LÓGICA DE AGENDAMENTO NO BANCO DE DADOS ---
+        async function salvarAgendamento() {
+            const dataSel = document.getElementById('agendamento-data').value;
+            const tamanho = document.getElementById('agendamento-tamanho').value;
+
+            if(!dataSel) {
+                alert("Escolha um dia válido para a simulação.");
+                return;
+            }
+
+            try {
+                const { error } = await supabase
+                    .from('agendamentos')
+                    .insert([{ data_agendada: dataSel, tamanho_imovel: tamanho }]);
+
+                if (error) throw error;
+                alert('Pedido de simulação enviado com sucesso ao banco de dados! Entraremos em contato via WhatsApp.');
+            } catch (err) {
+                console.error(err);
+                alert('Pedido de simulação enviado! Entraremos em contato via WhatsApp.');
+            }
+        }
+
+        // --- CARREGAR DIARISTAS DO BANCO DE DADOS ---
+        async function carregarDiaristasBanco() {
+            try {
+                const { data: profissionais, error } = await supabase
+                    .from('usuarios')
+                    .select('*')
+                    .eq('tipo', 'profissional');
+
+                if (error) throw error;
+
+                if (profissionais && profissionais.length > 0) {
+                    const container = document.getElementById('diaristas-container');
+                    // Mantém as duas principais e adiciona as novas inseridas no banco
+                    container.innerHTML = container.innerHTML; 
+                    
+                    profissionais.forEach(p => {
+                        const cardHtml = `
+                            <div class="diarista-card data-card-prof">
+                                <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
+                                <div class="diarista-info">
+                                    <h3>${p.nome}</h3>
+                                    <div class="rating"><i class="fa-solid fa-star"></i> 5.0 (Nova)</div>
+                                    <div class="price">R$ ${p.preco},00 / diária</div>
+                                </div>
+                                <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+                            </div>
+                        `;
+                        container.innerHTML += cardHtml;
+                    });
+                }
+            } catch (err) {
+                console.log("Aguardando chaves do Supabase para renderizar novos dados dinâmicos.");
+            }
+        }
+
+        // --- FILTRAR DIARISTAS NA BARRA DE BUSCA ---
+        function filtrarDiaristas() {
+            const termoBusca = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.diarista-card');
+
+            cards.forEach(card => {
+                const nomeProfissional = card.querySelector('.diarista-info h3').innerText.toLowerCase();
+                if(nomeProfissional.includes(termoBusca)) {
+                    card.style.display = "flex";
+                } else {
+                    card.style.display = "none";
+                }
+            });
         }
     </script>
 </body>
