@@ -434,6 +434,7 @@
             </div>
 
             <div id="diaristas-container">
+                <!-- Fallback local -->
                 <div class="diarista-card">
                     <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
                     <div class="diarista-info">
@@ -549,22 +550,12 @@
     </nav>
 
     <script>
-        // --- CONFIGURAÇÃO DAS CREDENCIAIS DO SUPABASE ---
+        // --- CONFIGURAÇÃO REAL DO SUPABASE ---
         const SUPABASE_URL = "https://bvhgfvvuelwoztacbhba.supabase.co";
-        const SUPABASE_KEY = "SUA_API_KEY_REAL_AQUI"; // Certifique-se de preencher com a chave correta
+        const SUPABASE_KEY = "sb_publishable_fNO2VjAfOXuDZa8mJLF6tg_V2XECQsa";
         
-        let supabaseClient = null;
-        
-        // Inicialização segura do cliente Supabase
-        if (SUPABASE_URL && SUPABASE_KEY && SUPABASE_KEY !== "SUA_API_KEY_REAL_AQUI") {
-            try {
-                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-            } catch (e) {
-                console.error("Erro ao inicializar o cliente Supabase:", e);
-            }
-        } else {
-            console.warn("Chaves do Supabase não configuradas corretamente. Rodando em modo de simulação local.");
-        }
+        // Inicialização global única usando o escopo do CDN
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // --- CONTROLE DE ALTERNAÇÃO DE ABAS ---
         function switchTab(tabId) {
@@ -605,12 +596,6 @@
                 return;
             }
 
-            if (!supabaseClient) {
-                alert(`[Modo Simulação local]: Cadastro de ${tipo} enviado! (Configure suas chaves reais do Supabase para funcionar online).`);
-                limparCamposCadastro(tipo);
-                return;
-            }
-
             try {
                 const { data, error } = await supabaseClient
                     .from('usuarios')
@@ -622,7 +607,7 @@
                 limparCamposCadastro(tipo);
             } catch (err) {
                 console.error("Erro ao salvar:", err);
-                alert(`[Modo Simulação local]: Cadastro de ${tipo} enviado devido a um erro de rede ou configuração.`);
+                alert("Houve uma falha ao enviar o cadastro para o banco de dados online.");
             }
         }
 
@@ -643,12 +628,7 @@
             const tamanho = document.getElementById('agendamento-tamanho').value;
 
             if(!dataSel) {
-                alert("Escolha um dia válido para a simulação.");
-                return;
-            }
-
-            if (!supabaseClient) {
-                alert('Pedido de simulação enviado! Entraremos em contato via WhatsApp. (Modo simulação local ativo).');
+                alert("Escolha um dia válido para o agendamento.");
                 return;
             }
 
@@ -658,14 +638,14 @@
                     .insert([{ data_agendada: dataSel, tamanho_imovel: tamanho }]);
 
                 if (error) throw error;
-                alert('Pedido de simulação enviado com sucesso ao banco de dados! Entraremos em contato via WhatsApp.');
+                alert('Pedido de agendamento enviado com sucesso! Entraremos em contato via WhatsApp.');
             } catch (err) {
                 console.error(err);
-                alert('Pedido de simulação enviado! Entraremos em contato via WhatsApp.');
+                alert('Não foi possível registrar o agendamento no sistema online.');
             }
         }
 
-        // --- CARREGAR DIARISTAS ---
+        // --- CARREGAR DIARISTAS ONLINE ---
         async function carregarDiaristasBanco() {
             const container = document.getElementById('diaristas-container');
             const cardsPadrao = `
@@ -688,12 +668,6 @@
                     <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
                 </div>
             `;
-
-            if (!supabaseClient) {
-                console.log("Aguardando chaves reais do Supabase. Carregando profissionais padrão locais.");
-                container.innerHTML = cardsPadrao;
-                return;
-            }
 
             try {
                 const { data: profissionais, error } = await supabaseClient
@@ -722,7 +696,7 @@
                     });
                 }
             } catch (err) {
-                console.error("Erro ao carregar profissionais do banco de dados:", err);
+                console.error("Erro ao carregar profissionais:", err);
                 container.innerHTML = cardsPadrao;
             }
         }
