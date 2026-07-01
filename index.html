@@ -32,13 +32,14 @@
         body {
             background-color: var(--light);
             color: var(--dark);
-            padding-bottom: 80px; 
+            padding-bottom: 90px; 
         }
 
         .container {
             padding: 20px;
             max-width: 500px;
             margin: 0 auto;
+            position: relative;
         }
 
         h2 {
@@ -302,20 +303,20 @@
         .restrictions-list li { font-size: 0.9rem; padding: 6px 0; display: flex; align-items: flex-start; gap: 10px; color: #334155; line-height: 1.4; }
         .restrictions-list i { margin-top: 3px; }
 
-        /* --- BARRA DE NAVEGAÇÃO INFERIOR --- */
+        /* --- BARRA DE NAVEGAÇÃO INFERIOR CORRIGIDA --- */
         .nav-bottom {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
             display: flex;
             justify-content: space-around;
             padding: 12px 0;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
-            z-index: 100;
-            border-top: 1px solid #f1f5f9;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            border-top: 1px solid #e2e8f0;
+            z-index: 9999; /* Força os botões ficarem na camada superior a qualquer container */
         }
 
         .nav-item {
@@ -492,7 +493,7 @@
 
             <div class="card-box" id="box-profissional">
                 <i class="fa-solid fa-broom" style="font-size: 2.2rem; color: var(--secondary); margin-bottom: 10px;"></i>
-                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 5px;">Quero Trabalhar</h3>
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 5px;">Quero Trabalho</h3>
                 <p style="font-size: 0.85rem; color: var(--gray); margin-bottom: 15px;">Para diaristas e profissionais de limpeza que buscam novos clientes.</p>
                 
                 <input type="text" id="prof-name" class="input-field" placeholder="Seu Nome Completo">
@@ -546,19 +547,22 @@
 
     <script>
         // --- CONFIGURAÇÃO DAS CREDENCIAIS DO SUPABASE ---
-        // Quando criar sua conta no Supabase, substitua as duas strings abaixo pelas suas chaves reais.
         const SUPABASE_URL = "https://SUA_URL_AQUI.supabase.co";
         const SUPABASE_KEY = "SUA_API_KEY_AQUI";
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // --- CONTROLE DE ALTERNAÇÃO DE ABAS ---
+        // --- CONTROLE DE ALTERNAÇÃO DE ABAS CORRIGIDO ---
         function switchTab(tabId) {
-            document.querySelectorAll('section').forEach(section => section.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            // Esconde todas as seções antes de ativar a próxima
+            document.querySelectorAll('main section').forEach(section => section.classList.remove('active'));
+            document.querySelectorAll('.nav-bottom .nav-item').forEach(item => item.classList.remove('active'));
 
-            document.getElementById(tabId).classList.add('active');
+            const targetSection = document.getElementById(tabId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
 
-            const navItems = document.querySelectorAll('.nav-item');
+            const navItems = document.querySelectorAll('.nav-bottom .nav-item');
             if(tabId === 'home') navItems[0].classList.add('active');
             if(tabId === 'buscar') { navItems[1].classList.add('active'); carregarDiaristasBanco(); }
             if(tabId === 'contratar') navItems[2].classList.add('active');
@@ -595,17 +599,15 @@
                 if (error) throw error;
 
                 alert(`Cadastro de ${tipo} realizado com sucesso de forma online!`);
-                // Limpa os campos
                 if(tipo === 'cliente') { document.getElementById('client-name').value = ''; document.getElementById('client-phone').value = ''; }
                 else { document.getElementById('prof-name').value = ''; document.getElementById('prof-phone').value = ''; document.getElementById('prof-price').value = ''; }
             } catch (err) {
                 console.error("Erro ao salvar:", err);
-                // Caso não tenha configurado as chaves ainda, simula o sucesso para não travar a experiência do usuário
                 alert(`[Modo Simulação local]: Cadastro de ${tipo} enviado!`);
             }
         }
 
-        // --- LÓGICA DE AGENDAMENTO NO BANCO DE DADOS ---
+        // --- LÓGICA DE AGENDAMENTO ---
         async function salvarAgendamento() {
             const dataSel = document.getElementById('agendamento-data').value;
             const tamanho = document.getElementById('agendamento-tamanho').value;
@@ -628,7 +630,7 @@
             }
         }
 
-        // --- CARREGAR DIARISTAS DO BANCO DE DADOS ---
+        // --- CARREGAR DIARISTAS ---
         async function carregarDiaristasBanco() {
             try {
                 const { data: profissionais, error } = await supabase
@@ -640,8 +642,29 @@
 
                 if (profissionais && profissionais.length > 0) {
                     const container = document.getElementById('diaristas-container');
-                    // Mantém as duas principais e adiciona as novas inseridas no banco
-                    container.innerHTML = container.innerHTML; 
+                    
+                    // Limpa os cards antigos adicionados para não duplicar, mantendo os padrões se quiser
+                    const cardsPadrao = `
+                        <div class="diarista-card">
+                            <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
+                            <div class="diarista-info">
+                                <h3>Maria Silva</h3>
+                                <div class="rating"><i class="fa-solid fa-star"></i> 4.9 (42 faxinas)</div>
+                                <div class="price">R$ 160,00 / diária</div>
+                            </div>
+                            <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+                        </div>
+                        <div class="diarista-card">
+                            <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
+                            <div class="diarista-info">
+                                <h3>Ana Souza</h3>
+                                <div class="rating"><i class="fa-solid fa-star"></i> 4.8 (19 faxinas)</div>
+                                <div class="price">R$ 150,00 / diária</div>
+                            </div>
+                            <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+                        </div>
+                    `;
+                    container.innerHTML = cardsPadrao;
                     
                     profissionais.forEach(p => {
                         const cardHtml = `
@@ -659,11 +682,11 @@
                     });
                 }
             } catch (err) {
-                console.log("Aguardando chaves do Supabase para renderizar novos dados dinâmicos.");
+                console.log("Aguardando chaves do Supabase.");
             }
         }
 
-        // --- FILTRAR DIARISTAS NA BARRA DE BUSCA ---
+        // --- FILTRAR DIARISTAS ---
         function filtrarDiaristas() {
             const termoBusca = document.getElementById('search-input').value.toLowerCase();
             const cards = document.querySelectorAll('.diarista-card');
