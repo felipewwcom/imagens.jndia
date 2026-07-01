@@ -549,7 +549,19 @@
         // --- CONFIGURAÇÃO DAS CREDENCIAIS DO SUPABASE ---
         const SUPABASE_URL = "https://SUA_URL_AQUI.supabase.co";
         const SUPABASE_KEY = "SUA_API_KEY_AQUI";
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        
+        let supabaseClient = null;
+        
+        // Inicialização protegida para evitar travamento do JS caso as chaves não estejam preenchidas
+        if (SUPABASE_URL !== "https://SUA_URL_AQUI.supabase.co" && SUPABASE_KEY !== "SUA_API_KEY_AQUI") {
+            try {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+            } catch (e) {
+                console.error("Erro ao inicializar o cliente Supabase:", e);
+            }
+        } else {
+            console.warn("Chaves do Supabase não configuradas. O site está rodando em modo de simulação local.");
+        }
 
         // --- CONTROLE DE ALTERNAÇÃO DE ABAS CORRIGIDO ---
         function switchTab(tabId) {
@@ -591,19 +603,35 @@
                 return;
             }
 
+            if (!supabaseClient) {
+                alert(`[Modo Simulação local]: Cadastro de ${tipo} enviado! (Configure suas chaves reais do Supabase para funcionar online).`);
+                limparCamposCadastro(tipo);
+                return;
+            }
+
             try {
-                const { data, error } = await supabase
+                const { data, error } = await supabaseClient
                     .from('usuarios')
                     .insert([{ nome: nome, telefone: telefone, preco: preco, tipo: tipo }]);
 
                 if (error) throw error;
 
                 alert(`Cadastro de ${tipo} realizado com sucesso de forma online!`);
-                if(tipo === 'cliente') { document.getElementById('client-name').value = ''; document.getElementById('client-phone').value = ''; }
-                else { document.getElementById('prof-name').value = ''; document.getElementById('prof-phone').value = ''; document.getElementById('prof-price').value = ''; }
+                limparCamposCadastro(tipo);
             } catch (err) {
                 console.error("Erro ao salvar:", err);
-                alert(`[Modo Simulação local]: Cadastro de ${tipo} enviado!`);
+                alert(`[Modo Simulação local]: Cadastro de ${tipo} enviado devido a um erro de rede.`);
+            }
+        }
+
+        function limparCamposCadastro(tipo) {
+            if(tipo === 'cliente') { 
+                document.getElementById('client-name').value = ''; 
+                document.getElementById('client-phone').value = ''; 
+            } else { 
+                document.getElementById('prof-name').value = ''; 
+                document.getElementById('prof-phone').value = ''; 
+                document.getElementById('prof-price').value = ''; 
             }
         }
 
@@ -617,8 +645,13 @@
                 return;
             }
 
+            if (!supabaseClient) {
+                alert('Pedido de simulação enviado! Entraremos em contato via WhatsApp. (Modo simulação local ativo).');
+                return;
+            }
+
             try {
-                const { error } = await supabase
+                const { error } = await supabaseClient
                     .from('agendamentos')
                     .insert([{ data_agendada: dataSel, tamanho_imovel: tamanho }]);
 
@@ -632,40 +665,45 @@
 
         // --- CARREGAR DIARISTAS ---
         async function carregarDiaristasBanco() {
+            const container = document.getElementById('diaristas-container');
+            const cardsPadrao = `
+                <div class="diarista-card">
+                    <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="diarista-info">
+                        <h3>Maria Silva</h3>
+                        <div class="rating"><i class="fa-solid fa-star"></i> 4.9 (42 faxinas)</div>
+                        <div class="price">R$ 160,00 / diária</div>
+                    </div>
+                    <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+                </div>
+                <div class="diarista-card">
+                    <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
+                    <div class="diarista-info">
+                        <h3>Ana Souza</h3>
+                        <div class="rating"><i class="fa-solid fa-star"></i> 4.8 (19 faxinas)</div>
+                        <div class="price">R$ 150,00 / diária</div>
+                    </div>
+                    <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
+                </div>
+            `;
+
+            if (!supabaseClient) {
+                console.log("Aguardando chaves reais do Supabase. Carregando profissionais padrão locais.");
+                container.innerHTML = cardsPadrao;
+                return;
+            }
+
             try {
-                const { data: profissionais, error } = await supabase
+                const { data: profissionais, error } = await supabaseClient
                     .from('usuarios')
                     .select('*')
                     .eq('tipo', 'profissional');
 
                 if (error) throw error;
 
+                container.innerHTML = cardsPadrao; // Reseta com os cards estáticos primeiro
+                
                 if (profissionais && profissionais.length > 0) {
-                    const container = document.getElementById('diaristas-container');
-                    
-                    // Limpa os cards antigos adicionados para não duplicar, mantendo os padrões se quiser
-                    const cardsPadrao = `
-                        <div class="diarista-card">
-                            <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
-                            <div class="diarista-info">
-                                <h3>Maria Silva</h3>
-                                <div class="rating"><i class="fa-solid fa-star"></i> 4.9 (42 faxinas)</div>
-                                <div class="price">R$ 160,00 / diária</div>
-                            </div>
-                            <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
-                        </div>
-                        <div class="diarista-card">
-                            <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
-                            <div class="diarista-info">
-                                <h3>Ana Souza</h3>
-                                <div class="rating"><i class="fa-solid fa-star"></i> 4.8 (19 faxinas)</div>
-                                <div class="price">R$ 150,00 / diária</div>
-                            </div>
-                            <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
-                        </div>
-                    `;
-                    container.innerHTML = cardsPadrao;
-                    
                     profissionais.forEach(p => {
                         const cardHtml = `
                             <div class="diarista-card data-card-prof">
@@ -682,7 +720,8 @@
                     });
                 }
             } catch (err) {
-                console.log("Aguardando chaves do Supabase.");
+                console.error("Erro ao carregar profissionais do banco de dados:", err);
+                container.innerHTML = cardsPadrao;
             }
         }
 
