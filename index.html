@@ -201,11 +201,6 @@
             font-weight: 700;
         }
 
-        .card-informativo .alerta {
-            color: var(--danger);
-            font-weight: 500;
-        }
-
         /* --- CARDS E CAIXAS --- */
         .card-box {
             background: white;
@@ -365,9 +360,9 @@
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <p>Ao usar o cupom <span class="cupom">"limpeza"</span>, você garante um valor especial no seu primeiro agendamento!</p>
-                <p>O desconto é válido de <strong>segunda a quarta-feira</strong> para pagamentos no <strong>Pix</strong>.</p>
-                <p>Na <strong>sexta-feira</strong>, oferecemos um bônus de <span class="valor">R$ 15,00</span> em todos os pacotes.</p>
-                <p class="alerta">Para agendamentos no mesmo dia, aos domingos, feriados e após o horário comercial, nossa tabela é diferenciada. Por favor, solicite as informações pelo WhatsApp.</p>
+                <p>O desconto é válido de segunda a quarta-feira para pagamentos no Pix.</p>
+                <p>Na sexta-feira, oferecemos um bônus de <span class="valor">R$15,00</span> em todos os pacotes.</p>
+                <p>Para agendamentos no mesmo dia, aos domingos, <span style="color: var(--primary); font-weight: 600;">feriados e após o horário comercial</span>, nossa tabela é diferenciada. Por favor, solicite as informações pelo WhatsApp.</p>
             </div>
 
             <div class="hero">
@@ -430,37 +425,8 @@
                 <input type="text" id="search-input" class="input-field" placeholder="🔎 Digite o nome de um profissional..." oninput="filtrarDiaristas()">
             </div>
 
-            <!-- LISTA DE DIARISTAS ATIVAS DO SEU SITE (Você pode editar/adicionar nomes e preços aqui) -->
             <div id="diaristas-container">
-                <div class="diarista-card">
-                    <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
-                    <div class="diarista-info">
-                        <h3>Maria Silva</h3>
-                        <div class="rating"><i class="fa-solid fa-star"></i> 4.9 (42 faxinas)</div>
-                        <div class="price">R$ 160,00 / diária</div>
-                    </div>
-                    <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
-                </div>
-
-                <div class="diarista-card">
-                    <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
-                    <div class="diarista-info">
-                        <h3>Ana Souza</h3>
-                        <div class="rating"><i class="fa-solid fa-star"></i> 4.8 (19 faxinas)</div>
-                        <div class="price">R$ 150,00 / diária</div>
-                    </div>
-                    <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
-                </div>
-
-                <div class="diarista-card">
-                    <div class="diarista-avatar"><i class="fa-solid fa-user"></i></div>
-                    <div class="diarista-info">
-                        <h3>Juliana Ribeiro</h3>
-                        <div class="rating"><i class="fa-solid fa-star"></i> 5.0 (Destaque)</div>
-                        <div class="price">R$ 170,00 / diária</div>
-                    </div>
-                    <button class="btn btn-primary" style="width: auto; padding: 10px 16px; font-size: 0.9rem; border-radius: 10px;" onclick="switchTab('contratar')">Ver</button>
-                </div>
+                <p id="no-results-msg" style="text-align: center; color: var(--gray); font-size: 0.95rem; margin-top: 10px;">Nenhuma profissional listada no momento.</p>
             </div>
         </section>
 
@@ -470,7 +436,6 @@
                 <label style="font-size: 0.9rem; color: var(--gray);"><strong>Tipo de Faxina:</strong> Standard (Limpeza Padrão)</label>
                 <hr style="margin: 15px 0; border: 0; border-top: 1px solid #f1f5f9;">
                 
-                <!-- LINK DE AGENDAMENTOS DO FORMSPREE APLICADO -->
                 <form action="https://formspree.io/f/xaqgrwqk" method="POST">
                     <label style="font-weight: 600; font-size: 0.95rem; display: block; margin-top: 10px;">Seu Nome:</label>
                     <input type="text" name="Nome do Cliente" class="input-field" placeholder="Seu nome completo" required>
@@ -499,7 +464,6 @@
             <h2><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Faça parte da JN Diarista</h2>
             <p style="color: var(--gray); margin-bottom: 20px; font-size: 0.95rem;">Preencha os dados abaixo para fazer sua inscrição:</p>
             
-            <!-- LINK DE CADASTROS DO FORMSPREE APLICADO -->
             <form action="https://formspree.io/f/xrewnzea" method="POST">
                 <div class="card-box">
                     <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; color: var(--primary);">
@@ -515,7 +479,7 @@
                     <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-top: 10px;">Nome Completo:</label>
                     <input type="text" name="Nome" class="input-field" placeholder="Seu Nome Completo" required>
                     
-                    <label style="font-weight: 600; font-size: 0.9 His; display: block; margin-top: 10px;">WhatsApp:</label>
+                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-top: 10px;">WhatsApp:</label>
                     <input type="tel" name="Telefone" class="input-field" placeholder="Seu WhatsApp (com DDD)" required>
                     
                     <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-top: 10px;">Preço cobrado por diária (Opcional para diaristas):</label>
@@ -531,7 +495,6 @@
             <p style="color: var(--gray); margin-bottom: 20px; font-size: 0.95rem;">Dúvidas ou problemas? Estamos aqui para ajudar.</p>
             
             <div class="card-box">
-                <!-- Reaproveitando o formulário de cadastros para mensagens gerais direto no seu e-mail -->
                 <form action="https://formspree.io/f/xrewnzea" method="POST">
                     <input type="hidden" name="Assunto" value="Dúvida / Contato Direto">
                     
@@ -598,15 +561,25 @@
         function filtrarDiaristas() {
             const termoBusca = document.getElementById('search-input').value.toLowerCase();
             const cards = document.querySelectorAll('.diarista-card');
+            const msgNoResults = document.getElementById('no-results-msg');
+
+            let encontrou Alguma = false;
 
             cards.forEach(card => {
                 const nomeProfissional = card.querySelector('.diarista-info h3').innerText.toLowerCase();
                 if(nomeProfissional.includes(termoBusca)) {
                     card.style.display = "flex";
+                    encontrouAlguma = true;
                 } else {
                     card.style.display = "none";
                 }
             });
+
+            if(cards.length === 0 || !encontrouAlguma) {
+                msgNoResults.style.display = "block";
+            } else {
+                msgNoResults.style.display = "none";
+            }
         }
     </script>
 </body>
