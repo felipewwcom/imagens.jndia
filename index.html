@@ -30,7 +30,7 @@
         body {
             background-color: var(--light);
             color: var(--dark);
-            padding-bottom: 90px; 
+            padding-bottom: 30px; 
         }
 
         .container {
@@ -38,16 +38,6 @@
             max-width: 500px;
             margin: 0 auto;
             position: relative;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            color: var(--dark);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         /* --- HEADER --- */
@@ -81,22 +71,7 @@
             border: 1px solid #fbcfe8;
         }
 
-        /* --- SEÇÕES --- */
-        section {
-            display: none;
-            animation: fadeIn 0.25s ease-in-out;
-        }
-
-        section.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- HERO / HOME --- */
+        /* --- HERO --- */
         .hero {
             background: linear-gradient(135deg, #fce7f3 0%, #fdf2f8 100%);
             padding: 25px 20px;
@@ -211,24 +186,6 @@
             margin-bottom: 20px;
         }
 
-        .input-field {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            margin-top: 8px;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            background-color: #f8fafc;
-            transition: 0.2s;
-        }
-
-        .input-field:focus {
-            outline: none;
-            border-color: var(--primary);
-            background-color: white;
-        }
-
         /* --- BOTÕES --- */
         .btn {
             width: 100%;
@@ -246,46 +203,8 @@
             text-decoration: none;
         }
 
-        .btn-primary { background-color: var(--primary); color: white; }
-        .btn-primary:hover { background-color: var(--primary-hover); }
-        
         .btn-secondary { background-color: var(--secondary); color: white; }
         .btn-secondary:hover { background-color: var(--secondary-hover); }
-        
-        .btn-outline { background-color: transparent; border: 2px solid var(--primary); color: var(--primary); }
-        .btn-outline:hover { background-color: var(--primary-light); }
-
-        /* --- CARDS DE DIARISTAS --- */
-        .diarista-card {
-            background: white;
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 15px;
-            border: 1px solid #f1f5f9;
-            display: flex;
-            gap: 15px;
-            align-items: center;
-        }
-
-        .diarista-avatar {
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            background-color: #fce7f3;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.3rem;
-            color: var(--primary);
-        }
-
-        .diarista-info {
-            flex: 1;
-        }
-
-        .diarista-info h3 { font-size: 1.05rem; margin-bottom: 2px; font-weight: 700; }
-        .rating { color: #f59e0b; font-size: 0.85rem; margin-bottom: 2px; font-weight: 600; }
-        .price { font-weight: 700; color: var(--secondary); font-size: 0.95rem; }
 
         /* --- DÚVIDAS E FAQ --- */
         .faq-item { margin-bottom: 20px; }
@@ -295,40 +214,6 @@
         .restrictions-list { list-style: none; margin-top: 12px; padding-left: 4px; }
         .restrictions-list li { font-size: 0.9rem; padding: 6px 0; display: flex; align-items: flex-start; gap: 10px; color: #334155; line-height: 1.4; }
         .restrictions-list i { margin-top: 3px; }
-
-        /* --- BARRA DE NAVEGAÇÃO INFERIOR --- */
-        .nav-bottom {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
-            border-top: 1px solid #e2e8f0;
-            z-index: 9999;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.7rem;
-            color: var(--gray);
-            background: none;
-            border: none;
-            cursor: pointer;
-            width: 20%;
-            font-weight: 600;
-            transition: 0.15s;
-        }
-
-        .nav-item i { font-size: 1.15rem; margin-bottom: 5px; transition: 0.15s; }
-        .nav-item.active { color: var(--primary); }
-        .nav-item.active i { transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -338,12 +223,14 @@
             <img src="LOGO.jpg" alt="Logo JN Diarista" class="logo-img">
             JN Diarista
         </div>
-        <i class="fa-regular fa-bell" style="font-size: 1.1rem; color: var(--gray); cursor: pointer;"></i>
+        <a href="https://wa.me/5511943666454" target="_blank" rel="noopener" style="color: var(--secondary); font-size: 1.3rem;">
+            <i class="fa-brands fa-whatsapp"></i>
+        </a>
     </header>
 
     <main class="container">
 
-        <section id="home" class="active">
+        <section id="home">
             <div class="discount-banner">
                 <i class="fa-solid fa-tags" style="color: #d97706;"></i>
                 <span>Na sua primeira limpeza tem desconto sim! Aproveite! 🎉</span>
@@ -372,7 +259,7 @@
 
             <div class="card-box" style="text-align: center; border: 1px solid #bbf7d0; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);">
                 <label style="font-weight: 700; display: block; margin-bottom: 12px; font-size: 1rem; color: var(--secondary);">
-                    Solicite seu orçamento agora mesmo!
+                    Fale conosco para Agendamentos, Cadastros ou Dúvidas!
                 </label>
                 <a href="https://wa.me/5511943666454" target="_blank" rel="noopener" class="btn btn-secondary" style="box-shadow: 0 4px 12px rgba(5, 150, 105, 0.2);">
                     <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i> Chamar no WhatsApp
@@ -416,171 +303,15 @@
                     </ul>
                 </div>
             </div>
-        </section>
 
-        <section id="buscar">
-            <h2><i class="fa-solid fa-user-sparkles" style="color: var(--primary);"></i> Profissionais Disponíveis</h2>
-            
-            <div class="card-box">
-                <input type="text" id="search-input" class="input-field" placeholder="🔎 Digite o nome de um profissional..." oninput="filtrarDiaristas()">
-            </div>
-
-            <div id="diaristas-container">
-                <p id="no-results-msg" style="text-align: center; color: var(--gray); font-size: 0.95rem; margin-top: 10px;">Nenhuma profissional listada no momento.</p>
-            </div>
-        </section>
-
-        <section id="contratar">
-            <h2><i class="fa-solid fa-calendar-day" style="color: var(--primary);"></i> Simular Agendamento</h2>
-            <div class="card-box">
-                <label style="font-size: 0.9rem; color: var(--gray);"><strong>Tipo de Faxina:</strong> Standard (Limpeza Padrão)</label>
-                <hr style="margin: 15px 0; border: 0; border-top: 1px solid #f1f5f9;">
-                
-                <form action="https://formspree.io/f/xaqgrwqk" method="POST">
-                    <label style="font-weight: 600; font-size: 0.95rem; display: block; margin-top: 10px;">Seu Nome:</label>
-                    <input type="text" name="Nome do Cliente" class="input-field" placeholder="Seu nome completo" required>
-
-                    <label style="font-weight: 600; font-size: 0.95rem; display: block; margin-top: 10px;">Seu WhatsApp:</label>
-                    <input type="tel" name="WhatsApp" class="input-field" placeholder="Ex: (11) 99999-9999" required>
-
-                    <label style="font-weight: 600; font-size: 0.95rem; display: block; margin-top: 10px;">Selecione o Dia:</label>
-                    <input type="date" name="Data Pretendida" class="input-field" required>
-
-                    <label style="font-weight: 600; font-size: 0.95rem; display: block; margin-top: 10px;">Tamanho do Imóvel:</label>
-                    <select name="Tamanho do Imóvel" class="input-field">
-                        <option value="Apartamento 1 quarto">Apartamento 1 quarto</option>
-                        <option value="Casa/Apto 2 quartos">Casa/Apto 2 quartos</option>
-                        <option value="Casa/Apto 3 quartos ou mais">Casa/Apto 3 quartos ou mais</option>
-                    </select>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa-solid fa-calendar-check"></i> Enviar Pedido de Agendamento
-                    </button>
-                </form>
-            </div>
-        </section>
-
-        <section id="cadastro">
-            <h2><i class="fa-solid fa-user-plus" style="color: var(--primary);"></i> Faça parte da JN Diarista</h2>
-            <p style="color: var(--gray); margin-bottom: 20px; font-size: 0.95rem;">Preencha os dados abaixo para fazer sua inscrição:</p>
-            
-            <form action="https://formspree.io/f/xrewnzea" method="POST">
-                <div class="card-box">
-                    <h3 style="font-size: 1.1rem; font-weight: 700; margin-bottom: 15px; color: var(--primary);">
-                        <i class="fa-solid fa-address-card"></i> Formulário de Inscrição
-                    </h3>
-                    
-                    <label style="font-weight: 600; font-size: 0.9rem; display: block;">Eu quero me cadastrar como:</label>
-                    <select name="Perfil Desejado" class="input-field" required>
-                        <option value="Diarista / Profissional de Limpeza">Quero Trabalho (Diarista)</option>
-                        <option value="Cliente / Contratante">Quero Contratar (Cliente)</option>
-                    </select>
-
-                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-top: 10px;">Nome Completo:</label>
-                    <input type="text" name="Nome" class="input-field" placeholder="Seu Nome Completo" required>
-                    
-                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-top: 10px;">WhatsApp:</label>
-                    <input type="tel" name="Telefone" class="input-field" placeholder="Seu WhatsApp (com DDD)" required>
-                    
-                    <label style="font-weight: 600; font-size: 0.9rem; display: block; margin-top: 10px;">Preço cobrado por diária (Opcional para diaristas):</label>
-                    <input type="number" name="Preço Pretendido" class="input-field" placeholder="Ex: 150">
-                    
-                    <button type="submit" class="btn btn-secondary">Enviar Inscrição</button>
-                </div>
-            </form>
-        </section>
-
-        <section id="contatos">
-            <h2><i class="fa-solid fa-envelope" style="color: var(--primary);"></i> Fale Conosco</h2>
-            <p style="color: var(--gray); margin-bottom: 20px; font-size: 0.95rem;">Dúvidas ou problemas? Estamos aqui para ajudar.</p>
-            
-            <div class="card-box">
-                <form action="https://formspree.io/f/xrewnzea" method="POST">
-                    <input type="hidden" name="Assunto" value="Dúvida / Contato Direto">
-                    
-                    <label style="font-weight: 600; font-size: 0.95rem; display: block;">Seu Nome:</label>
-                    <input type="text" name="Nome" class="input-field" placeholder="Ex: João Silva" required>
-
-                    <label style="font-weight: 600; font-size: 0.95rem; display: block; margin-top: 10px;">Mensagem:</label>
-                    <textarea name="Mensagem" class="input-field" rows="4" placeholder="Como podemos te ajudar?" style="resize: none;" required></textarea>
-
-                    <button type="submit" class="btn btn-primary">
-                        <i class="fa-solid fa-paper-plane"></i> Enviar Mensagem
-                    </button>
-                </form>
+            <div style="text-align: center; margin-top: 20px;">
+                <a href="https://wa.me/5511943666454" target="_blank" rel="noopener" class="btn btn-secondary">
+                    <i class="fa-brands fa-whatsapp" style="font-size: 1.3rem;"></i> Atendimento Direto no WhatsApp
+                </a>
             </div>
         </section>
 
     </main>
 
-    <nav class="nav-bottom">
-        <button class="nav-item active" onclick="switchTab('home')">
-            <i class="fa-solid fa-house"></i>
-            <span>Início</span>
-        </button>
-        <button class="nav-item" onclick="switchTab('buscar')">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <span>Buscar</span>
-        </button>
-        <button class="nav-item" onclick="switchTab('contratar')">
-            <i class="fa-solid fa-calendar-days"></i>
-            <span>Agendar</span>
-        </button>
-        <button class="nav-item" onclick="switchTab('cadastro')">
-            <i class="fa-solid fa-user-plus"></i>
-            <span>Cadastrar</span>
-        </button>
-        <button class="nav-item" onclick="switchTab('contatos')">
-            <i class="fa-solid fa-comments"></i>
-            <span>Contato</span>
-        </button>
-    </nav>
-
-    <script>
-        // --- CONTROLE DE ALTERNAÇÃO DE ABAS ---
-        function switchTab(tabId) {
-            document.querySelectorAll('main section').forEach(section => section.classList.remove('active'));
-            document.querySelectorAll('.nav-bottom .nav-item').forEach(item => item.classList.remove('active'));
-
-            const targetSection = document.getElementById(tabId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-            }
-
-            const navItems = document.querySelectorAll('.nav-bottom .nav-item');
-            if(tabId === 'home') navItems[0].classList.add('active');
-            if(tabId === 'buscar') navItems[1].classList.add('active');
-            if(tabId === 'contratar') navItems[2].classList.add('active');
-            if(tabId === 'cadastro') navItems[3].classList.add('active');
-            if(tabId === 'contatos') navItems[4].classList.add('active');
-
-            window.scrollTo(0, 0);
-        }
-
-        // --- SISTEMA DE FILTRO E BUSCA LOCAL DE DIARISTAS ---
-        function filtrarDiaristas() {
-            const termoBusca = document.getElementById('search-input').value.toLowerCase();
-            const cards = document.querySelectorAll('.diarista-card');
-            const msgNoResults = document.getElementById('no-results-msg');
-
-            let encontrouAlguma = false;
-
-            cards.forEach(card => {
-                const nomeProfissional = card.querySelector('.diarista-info h3').innerText.toLowerCase();
-                if(nomeProfissional.includes(termoBusca)) {
-                    card.style.display = "flex";
-                    encontrouAlguma = true;
-                } else {
-                    card.style.display = "none";
-                }
-            });
-
-            if(cards.length === 0 || !encontrouAlguma) {
-                msgNoResults.style.display = "block";
-            } else {
-                msgNoResults.style.display = "none";
-            }
-        }
-    </script>
 </body>
 </html>
