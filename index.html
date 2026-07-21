@@ -140,40 +140,50 @@
         .card-informativo {
             background-color: #fff5f7;
             border: 2px solid #ffccd7;
-            border-radius: 16px;
+            border-radius: 20px;
             padding: 25px 20px;
             margin: 20px 0;
             text-align: center;
-            color: #334155;
+            color: #1e293b;
             box-shadow: 0 4px 12px rgba(255, 204, 215, 0.2);
         }
 
         .icone-check {
-            width: 45px;
-            height: 45px;
-            border: 2px solid #ff6b8b;
+            width: 50px;
+            height: 50px;
+            border: 2px solid #e11d48;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 15px auto;
-            color: #ff6b8b;
-            font-size: 1.3rem;
+            margin: 0 auto 18px auto;
+            color: #e11d48;
+            font-size: 1.4rem;
         }
 
         .card-informativo p {
-            font-size: 0.95rem;
+            font-size: 0.98rem;
             line-height: 1.5;
-            margin-bottom: 14px;
+            margin-bottom: 16px;
         }
 
         .card-informativo p:last-child {
             margin-bottom: 0;
         }
 
-        .card-informativo .cupom, .card-informativo .valor {
-            color: #db2777;
+        .card-informativo .cupom {
+            color: #e11d48;
             font-weight: 700;
+        }
+
+        .card-informativo .destaque-rosa {
+            color: #e11d48;
+            font-weight: 700;
+        }
+
+        .card-informativo .texto-vermelho {
+            color: #e11d48;
+            font-weight: 600;
         }
 
         /* --- CARDS E CAIXAS --- */
@@ -316,14 +326,15 @@
                 <div class="carousel-item"><img src="8 HORAS.jpg" alt="Oferta 8 Horas"></div>
             </div>
 
+            <!-- CARD INFORMATIVO EDITADO -->
             <div class="card-informativo">
                 <div class="icone-check">
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <p>Ao usar o cupom <span class="cupom">"limpeza"</span>, você garante um valor especial no seu primeiro agendamento!</p>
-                <p>O desconto é válido de segunda a quarta-feira para pagamentos no Pix.</p>
-                <p>Na sexta-feira, oferecemos um bônus de <span class="valor">R$15,00</span> em todos os pacotes.</p>
-                <p>Para agendamentos no mesmo dia, aos domingos, <span style="color: var(--primary); font-weight: 600;">feriados e após o horário comercial</span>, nossa tabela é diferenciada. Por favor, solicite as informações pelo WhatsApp.</p>
+                <p><strong>O desconto é válido de segunda a quarta-feira para pagamentos no Pix.</strong></p>
+                <p>Na sexta-feira, temos um <span class="destaque-rosa">acréscimo de R$ 15,00</span> em todos os pacotes.</p>
+                <p class="texto-vermelho">Para agendamentos no mesmo dia, aos domingos, feriados e após o horário comercial, nossa tabela é diferenciada. Por favor, solicite as informações pelo WhatsApp.</p>
             </div>
 
             <div class="hero">
